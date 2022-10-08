@@ -31,4 +31,14 @@ return [
         ],
     ],
 
+    'request_permanents_to_ignore' => [
+        'cvv',
+        'cnum'
+    ],
+
+    'request_headers_to_ignore' => [
+        'cvv',
+        'cnum'
+    ]
+
 ];

@@ -14,13 +14,13 @@ class Crawler {
         $crawledRequest = [
             'path' => $request->path(),
             'fullUrl' => $request->fullUrl(),
-            'headers' => $request->headers->all(),
+            'headers' => self::CleanRequestHeaders($request->headers->all()),
             'method' => $request->method(),
             'ip' => $request->ips(),
             'userAgent' => $request->userAgent(),
             'isSecure' => $request->secure(),
             'requestId' => $request->requestId,
-            'payload' => $request->all(),
+            'payload' => self::CleanRequestPayload($request->all()),
         ];
 
         try {
@@ -121,4 +121,35 @@ class Crawler {
         }
         return true;
     }
+
+    public static function CleanRequestPayload($payload) {
+
+        $response = [];
+
+        foreach($payload as $key => $value) {
+
+            if(!in_array($key, config('crawler.request_permanents_to_ignore'))) {
+                $response[$key] = $value;
+            }
+
+        }
+
+        return $response;
+    }
+
+    public static function CleanRequestHeaders($payload) {
+
+        $response = [];
+
+        foreach($payload as $key => $value) {
+
+            if(!in_array($key, config('crawler.request_headers_to_ignore'))) {
+                $response[$key] = $value;
+            }
+
+        }
+
+        return $response;
+    }
+
 }
