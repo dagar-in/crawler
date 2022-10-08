@@ -3,7 +3,7 @@
 use Dagar\Crawler\Controllers\CrawlerController;
 use Illuminate\Support\Facades\Route;
 
-$root = env('CRAWL_UI_ENDPOINT', 'crawl');
+$root = config('crawler.uri', 'crawler');
 
 Route::get($root, [CrawlerController::class, 'index'])->name('crawler.dashboard');
 

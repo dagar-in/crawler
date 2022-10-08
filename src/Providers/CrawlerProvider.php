@@ -15,8 +15,6 @@ class CrawlerProvider extends ServiceProvider
     public function boot(Kernel $kernel)
     {
 
-        $this->app->q = 0;
-
         /*
          * Register the middleware
          */
@@ -36,6 +34,11 @@ class CrawlerProvider extends ServiceProvider
          * Register the migrations
          */
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
+        /*
+        * Register the translations
+        */
+        $this->mergeConfigFrom(__DIR__.'/../config/crawler.php', 'crawler');
     }
 
     public function register()
@@ -44,7 +47,7 @@ class CrawlerProvider extends ServiceProvider
         //     return new CrawlerMiddleware();
         // });
 
-        $save_query = env('SAVE_QUERY', true);
+        $save_query = config('crawler.save_query');
 
         if ($save_query) {
 

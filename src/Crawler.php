@@ -95,4 +95,30 @@ class Crawler {
         return $object;
     }
 
+    public static function CheckIpWhitelist(){
+        $ip = request()->ip();
+        $whitelist = config('crawler.ip_whitelist');
+        if(!in_array($ip, $whitelist)){
+            return false;
+        }
+        return true;
+    }
+
+    public static function CheckUserAgentWhitelist(){
+        $userAgent = request()->userAgent();
+        $whitelist = config('crawler.user_agent_whitelist');
+        if(!in_array($userAgent, $whitelist)){
+            return false;
+        }
+        return true;
+    }
+
+    public static function CheckRefererWhitelist(){
+        $referer = request()->header('referer');
+        $whitelist = config('crawler.referer_whitelist');
+        if(!in_array($referer, $whitelist)){
+            return false;
+        }
+        return true;
+    }
 }
