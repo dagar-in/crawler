@@ -13,6 +13,9 @@
             "email": "4nkitd+crawler@gmail.com"
         }
     ],
+    "license": [
+       "MIT"
+   ],
     "minimum-stability": "dev",
     "require": {}
 }
