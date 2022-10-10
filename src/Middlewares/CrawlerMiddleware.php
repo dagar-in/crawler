@@ -17,15 +17,19 @@ class CrawlerMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $requestLog = Crawler::extractRequest($request);
 
-        EntryModel::create([
-            'type' => 'request',
-            'request_id' => $requestLog['requestId'] ?? uniqid(),
-            'content' => ($requestLog),
-        ]);
+        if (strpos($request->url(), config('crawler.uri')) !== false) {
 
-        return $next($request);
+            $requestLog = Crawler::extractRequest($request);
+
+            EntryModel::create([
+                'type' => 'request',
+                'request_id' => $requestLog['requestId'] ?? uniqid(),
+                'content' => ($requestLog),
+            ]);
+
+            return $next($request);
+        }
     }
 
     /**
@@ -37,12 +41,15 @@ class CrawlerMiddleware
      */
     public function terminate($request, $response)
     {
-        $responseLog = Crawler::extractResponse($response);
+        if (strpos($request->url(), config('crawler.uri')) !== false) {
 
-        EntryModel::create([
-            'type' => 'response',
-            'request_id' => 'R.'.$request->requestId ,
-            'content' => $responseLog,
-        ]);
+            $responseLog = Crawler::extractResponse($response);
+
+            EntryModel::create([
+                'type' => 'response',
+                'request_id' => 'R.' . $request->requestId,
+                'content' => $responseLog,
+            ]);
+        }
     }
 }
