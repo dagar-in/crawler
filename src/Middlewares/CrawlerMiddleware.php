@@ -18,7 +18,7 @@ class CrawlerMiddleware
     public function handle($request, Closure $next)
     {
 
-        if (strpos($request->url(), config('crawler.uri')) !== false) {
+        if (strpos($request->url(), config('crawler.uri')) == false) {
 
             $requestLog = Crawler::extractRequest($request);
 
@@ -28,8 +28,8 @@ class CrawlerMiddleware
                 'content' => ($requestLog),
             ]);
 
-            return $next($request);
         }
+        return $next($request);
     }
 
     /**
