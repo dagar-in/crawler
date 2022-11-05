@@ -17,17 +17,20 @@ class CrawlerMiddleware
      */
     public function handle($request, Closure $next)
     {
-
+        
         if (strpos($request->url(), config('crawler.uri')) == false) {
 
             $requestLog = Crawler::extractRequest($request);
 
-            EntryModel::create([
-                'type' => 'request',
-                'request_id' => $requestLog['requestId'] ?? uniqid(),
-                'content' => ($requestLog),
-            ]);
+            if(EntryModel::where('request_id', ($requestLog['requestId'] ?? uniqid()))->count() == 0) {
+            
+                EntryModel::create([
+                    'type' => 'request',
+                    'request_id' => $requestLog['requestId'] ?? uniqid(),
+                    'content' => ($requestLog),
+                ]);
 
+            }
         }
         return $next($request);
     }
@@ -41,14 +44,16 @@ class CrawlerMiddleware
      */
     public function terminate($request, $response)
     {
-        if (strpos($request->url(), config('crawler.uri')) !== false) {
-
+        if (strpos($request->requestUri, config('crawler.uri'))) {
+            
             $responseLog = Crawler::extractResponse($response);
 
-            if(EntryModel::where('request_id', 'R-'.$responseLog['requestId'] ?? uniqid())->count() == 0) {
+            $uniqId = 'R.'.($responseLog['requestId'] ?? uniqid());
+            
+            if(EntryModel::where('request_id', $uniqId)->count() == 0) {
                 EntryModel::create([
                     'type' => 'response',
-                    'request_id' => 'R-'.$responseLog['requestId'] ?? uniqid(),
+                    'request_id' =>  $uniqId,
                     'content' => ($responseLog),
                 ]);
             }
