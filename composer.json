@@ -16,6 +16,13 @@
     "license": [
        "MIT"
    ],
+   "extra": {
+        "laravel": {
+            "providers": [
+                "Dagar\\Crawler\\Providers\\CrawlerProvider"
+            ]
+        }
+    },
     "minimum-stability": "dev",
     "require": {}
 }
