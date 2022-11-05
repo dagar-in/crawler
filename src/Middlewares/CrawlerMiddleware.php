@@ -45,7 +45,7 @@ class CrawlerMiddleware
 
             $responseLog = Crawler::extractResponse($response);
 
-            if(EntryModel::where('request_id', 'R-'.$responseLog['requestId'])->count() == 0) {
+            if(EntryModel::where('request_id', 'R-'.$responseLog['requestId'] ?? uniqid())->count() == 0) {
                 EntryModel::create([
                     'type' => 'response',
                     'request_id' => 'R-'.$responseLog['requestId'] ?? uniqid(),
