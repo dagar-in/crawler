@@ -28,4 +28,4 @@ The url and all other features can be configured from config file.
 - Refer Header Whitelist
 
 ## License
-
+MIT
